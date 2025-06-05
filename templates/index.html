@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Parking Occupancy Predictor</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Parking Occupancy Predictor</h1>
+      <form method="POST" action="/predict">
+        <label>System Code:</label>
+        <input
+          type="text"
+          name="system_code"
+          required
+          value="BHMBCCMKT01"
+        /><br />
+
+        <label>Capacity:</label>
+        <input type="number" name="capacity" required /><br />
+
+        <label>Last Updated (MM/DD/YYYY HH:MM):</label>
+        <input
+          type="text"
+          name="timestamp"
+          required
+          placeholder="10/4/2016 10:59"
+        /><br />
+
+        <button type="submit">Predict</button>
+      </form>
+
+      {% if prediction is not none %}
+      <h2>Predicted Occupancy: {{ prediction }}</h2>
+      {% endif %}
+    </div>
+  </body>
+</html>
