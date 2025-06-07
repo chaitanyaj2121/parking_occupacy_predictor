@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request
 import pandas as pd
 import joblib
-import numpy as np
+import os
 
 app = Flask(__name__)
 
@@ -14,6 +14,7 @@ LAST_TRAINING_DATE = pd.Timestamp('2016-12-19')
 @app.route('/', methods=['GET', 'POST'])
 def index():
     prediction = None
+    error = None
     if request.method == 'POST':
         date_str = request.form['date']
         try:
@@ -24,20 +25,17 @@ def index():
             steps = (input_date - LAST_TRAINING_DATE).days
             
             if steps < 1:
-                return render_template('index.html', 
-                                      error="Date must be after 2016-12-19",
-                                      prediction=prediction)
-            
-            # Get forecast
-            forecast = model.get_forecast(steps=steps)
-            prediction = round(forecast.predicted_mean.iloc[-1])
-            
+                error = "Date must be after 2016-12-19"
+            else:
+                # Get forecast
+                forecast = model.get_forecast(steps=steps)
+                prediction = round(forecast.predicted_mean.iloc[-1])
+                
         except Exception as e:
-            return render_template('index.html', 
-                                  error=f"Error: {str(e)}",
-                                  prediction=prediction)
+            error = f"Error: {str(e)}"
     
-    return render_template('index.html', prediction=prediction)
+    return render_template('index.html', prediction=prediction, error=error)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)

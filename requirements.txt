@@ -48,6 +48,7 @@ opencv-python==4.11.0.86
 packaging==24.2
 pandas==2.2.3
 parso==0.8.4
+patsy==1.0.1
 pillow==11.0.0
 platformdirs==4.3.8
 prompt_toolkit==3.0.51
@@ -73,6 +74,7 @@ setuptools==75.8.2
 six==1.16.0
 smmap==5.0.1
 stack-data==0.6.3
+statsmodels==0.14.4
 streamlit==1.40.1
 sympy==1.13.1
 tenacity==9.0.0
