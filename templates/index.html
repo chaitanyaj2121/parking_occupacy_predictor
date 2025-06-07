@@ -1,40 +1,80 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Parking Occupancy Predictor</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
-    />
+    <title>Parking Occupancy Forecast</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+      .container {
+        background: #f5f5f5;
+        padding: 30px;
+        border-radius: 10px;
+      }
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+      input[type="date"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+      button {
+        background: #4caf50;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      .result {
+        margin-top: 20px;
+        padding: 15px;
+        background: #e8f5e9;
+        border-radius: 4px;
+      }
+      .error {
+        color: #d32f2f;
+        background: #ffebee;
+        padding: 10px;
+        border-radius: 4px;
+      }
+    </style>
   </head>
   <body>
     <div class="container">
-      <h1>Parking Occupancy Predictor</h1>
-      <form method="POST" action="/predict">
-        <label>System Code:</label>
-        <input
-          type="text"
-          name="system_code"
-          required
-          value="BHMBCCMKT01"
-        /><br />
-
-        <label>Capacity:</label>
-        <input type="number" name="capacity" required /><br />
-
-        <label>Last Updated (MM/DD/YYYY HH:MM):</label>
-        <input
-          type="text"
-          name="timestamp"
-          required
-          placeholder="10/4/2016 10:59"
-        /><br />
-
-        <button type="submit">Predict</button>
+      <h1>Parking Occupancy Forecast</h1>
+      <form method="POST">
+        <div class="form-group">
+          <label for="date">Enter Date (after 2016-12-19):</label>
+          <input type="date" id="date" name="date" min="2016-12-20" required />
+        </div>
+        <button type="submit">Predict Occupancy</button>
       </form>
 
-      {% if prediction is not none %}
-      <h2>Predicted Occupancy: {{ prediction }}</h2>
+      {% if error %}
+      <div class="error">{{ error }}</div>
+      {% endif %} {% if prediction is not none %}
+      <div class="result">
+        <h3>Forecast Result:</h3>
+        <p>
+          Predicted occupancy on {{ request.form['date'] }}:
+          <strong>{{ prediction }}</strong> vehicles
+        </p>
+      </div>
       {% endif %}
     </div>
   </body>
